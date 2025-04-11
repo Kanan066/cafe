@@ -1,0 +1,85 @@
+<!-- templates/cart/staff_dashboard.html -->
+<h1>Customer Orders</h1>
+
+<table border="1" cellspacing="0" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.menu_item.name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>
+                {% if order.status == 'accepted' %}
+                    <span style="color: green; font-weight: bold;">{{ order.status }}</span>
+                {% elif order.status == 'declined' %}
+                    <span style="color: red; font-weight: bold;">{{ order.status }}</span>
+                {% else %}
+                    <span style="color: gray; font-weight: bold;">{{ order.status }}</span>
+                {% endif %}
+            </td>
+            
+         <!-- templates/cart/staff_dashboard.html -->
+<h1>Customer Orders</h1>
+
+<table border="1" cellspacing="0" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.customer.username }}</td> <!-- ✅ Fixed -->
+            <td>{{ order.menu_item.name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>
+                <td>
+                    {% if order.status == 'accepted' %}
+                        <span style="color: green; font-weight: bold;">{{ order.status }}</span>
+                    {% elif order.status == 'declined' %}
+                        <span style="color: red; font-weight: bold;">{{ order.status }}</span>
+                    {% else %}
+                        <span style="color: gray; font-weight: bold;">{{ order.status }}</span>
+                    {% endif %}
+                </td>
+                
+                    {{ order.status }}
+                </span>
+            </td>
+            <td>
+                <a href="{% url 'update_order_status' order.id 'accepted' %}">Accept</a> |
+                <a href="{% url 'update_order_status' order.id 'declined' %}">Decline</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No orders found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+           {{ order.status }}
+                </span>
+            </td>
+            <td>
+                <a href="{% url 'update_order_status' order.id 'accepted' %}">Accept</a> |
+                <a href="{% url 'update_order_status' order.id 'declined' %}">Decline</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No orders found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

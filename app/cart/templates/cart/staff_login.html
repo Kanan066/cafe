@@ -1,0 +1,15 @@
+<!-- cart/templates/cart/staff_login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Login</title>
+</head>
+<body>
+    <h1>Staff Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>

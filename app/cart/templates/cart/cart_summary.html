@@ -1,4 +1,16 @@
 {% extends 'base.html' %}
+{% for item in cart_items %}
+  <div>
+    <span>{{ item.name }} - ${{ item.price }}</span>
+    <form action="{% url 'place_order' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.id }}">
+        <input type="number" name="quantity" value="{{ item.quantity }}">
+        <button type="submit">Place Order</button>
+    </form>
+  </div>
+{% endfor %}
+
 
 {% block content %}
         <!-- header -->

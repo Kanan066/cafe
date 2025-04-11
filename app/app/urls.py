@@ -18,10 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from . import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')), 
-    path('cart/', include('cart.urls')), 
+    path('cart/', include('cart.urls')),
+     path('admin/', admin.site.urls),
+    path('', include('cart.urls')), 
+    path('staff/login/', auth_views.LoginView.as_view(template_name='cart/staff_login.html'), name='staff_login'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

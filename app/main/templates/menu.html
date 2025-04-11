@@ -35,7 +35,13 @@
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
-                                    <button class="btn btn-outline-dark mt-auto">Add to Cart</button>
+                                    <form action="{% url 'place_order' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ product.id }}">
+                                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 70px; display: inline-block;">
+                                        <button type="submit" class="btn btn-outline-dark mt-auto">Order</button>
+                                    </form>
+                                    
                                 </div>
                             </div>
                         </div>
