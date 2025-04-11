@@ -30,4 +30,3 @@ urlpatterns = [
     path('staff/login/', auth_views.LoginView.as_view(template_name='cart/staff_login.html'), name='staff_login'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
