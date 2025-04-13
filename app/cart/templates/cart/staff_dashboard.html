@@ -1,85 +1,157 @@
-<!-- templates/cart/staff_dashboard.html -->
-<h1>Customer Orders</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cafe Staff Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefaf6;
+      padding: 20px;
+    }
 
-<table border="1" cellspacing="0" cellpadding="6">
+    .dashboard {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #5a3e36;
+      margin-bottom: 30px;
+    }
+
+    .search-bar {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 250px;
+    }
+
+    .notification {
+      background-color: #fff6e5;
+      border-left: 5px solid #ffb74d;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #e6d3c5;
+      color: #3e2c23;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f5f2;
+    }
+
+    .status {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+      text-transform: capitalize;
+    }
+
+    .accepted    { background-color: #e0f8e9; color: #2e7d32; }
+    .declined    { background-color: #fdecea; color: #c62828; }
+    .pending     { background-color: #f0f0f0; color: #6c757d; }
+    .preparing   { background-color: #fff3cd; color: #856404; }
+    .out-for-delivery { background-color: #d1ecf1; color: #0c5460; }
+
+    .action-links a {
+      margin: 0 6px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .action-links .accept { color: #2e7d32; }
+    .action-links .decline { color: #c62828; }
+    .action-links .prep { color: #856404; }
+    .action-links .delivery { color: #0c5460; }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+  <h1>☕ Customer Orders</h1>
+
+  <div class="notification">
+    🔔 {{ new_orders_count }} new order{{ new_orders_count|pluralize }} awaiting action!
+  </div>
+
+  <div class="search-bar">
+    <form method="GET" action=".">
+      <input type="text" name="q" placeholder="Search customer or item..." value="{{ request.GET.q }}">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <table>
     <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
+      <tr>
+        <th>Customer</th>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order.customer_name }}</td>
-            <td>{{ order.menu_item.name }}</td>
-            <td>{{ order.quantity }}</td>
-            <td>
-                {% if order.status == 'accepted' %}
-                    <span style="color: green; font-weight: bold;">{{ order.status }}</span>
-                {% elif order.status == 'declined' %}
-                    <span style="color: red; font-weight: bold;">{{ order.status }}</span>
-                {% else %}
-                    <span style="color: gray; font-weight: bold;">{{ order.status }}</span>
-                {% endif %}
-            </td>
-            
-         <!-- templates/cart/staff_dashboard.html -->
-<h1>Customer Orders</h1>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.customer.username }}</td>
+        <td>{{ order.menu_item.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>
+          <span class="status {{ order.status|slugify }}">{{ order.status }}</span>
+        </td>
+        <td class="action-links">
+          <a href="{% url 'update_order_status' order.id 'accepted' %}" class="accept">Accept</a> |
+          <a href="{% url 'update_order_status' order.id 'declined' %}" class="decline">Decline</a> |
+          <a href="{% url 'update_order_status' order.id 'preparing' %}" class="prep">Preparing</a> |
+          <a href="{% url 'update_order_status' order.id 'out-for-delivery' %}" class="delivery">Deliver</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">No orders found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-<table border="1" cellspacing="0" cellpadding="6">
-    <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order.customer.username }}</td> <!-- ✅ Fixed -->
-            <td>{{ order.menu_item.name }}</td>
-            <td>{{ order.quantity }}</td>
-            <td>
-                <td>
-                    {% if order.status == 'accepted' %}
-                        <span style="color: green; font-weight: bold;">{{ order.status }}</span>
-                    {% elif order.status == 'declined' %}
-                        <span style="color: red; font-weight: bold;">{{ order.status }}</span>
-                    {% else %}
-                        <span style="color: gray; font-weight: bold;">{{ order.status }}</span>
-                    {% endif %}
-                </td>
-                
-                    {{ order.status }}
-                </span>
-            </td>
-            <td>
-                <a href="{% url 'update_order_status' order.id 'accepted' %}">Accept</a> |
-                <a href="{% url 'update_order_status' order.id 'declined' %}">Decline</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5">No orders found.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
-           {{ order.status }}
-                </span>
-            </td>
-            <td>
-                <a href="{% url 'update_order_status' order.id 'accepted' %}">Accept</a> |
-                <a href="{% url 'update_order_status' order.id 'declined' %}">Decline</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5">No orders found.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="footer">
+  &copy; 2025 Bean and Blossoms. Made with ❤️ and caffeine.
+</div>
+
+</body>
+</html>

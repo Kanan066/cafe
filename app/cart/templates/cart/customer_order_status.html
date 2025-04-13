@@ -1,31 +1,50 @@
-<!-- templates/cart/customer_order_status.html -->
-<h1>Your Orders</h1>
+{% extends 'base.html' %}
 
-<table border="1" cellspacing="0" cellpadding="6">
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order.menu_item.name }}</td>
-            <td>{{ order.quantity }}</td>
-            <td>
-                {% if order.status == 'accepted' %}
-                    <span style="color: green; font-weight: bold;">{{ order.status }}</span>
-                {% elif order.status == 'declined' %}
-                    <span style="color: red; font-weight: bold;">{{ order.status }}</span>
-                {% else %}
-                    <span style="color: gray; font-weight: bold;">{{ order.status }}</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3">No orders found.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% block content %}
+<header class="bg-dark py-5">
+    <div class="container text-center text-white">
+        <h1 class="display-4 fw-bold">Your Orders</h1>
+        <p class="lead text-white-50">Check the status of your previous orders</p>
+    </div>
+</header>
+
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped bg-white shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.menu_item.name }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>
+                                    {% if order.status == 'accepted' %}
+                                        <span class="badge bg-success text-capitalize">{{ order.status }}</span>
+                                    {% elif order.status == 'declined' %}
+                                        <span class="badge bg-danger text-capitalize">{{ order.status }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary text-capitalize">{{ order.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <h5 class="text-muted">No orders found.</h5>
+                <a href="{% url 'menu' %}" class="btn btn-primary mt-3">Browse Menu</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

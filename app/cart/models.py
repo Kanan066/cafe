@@ -10,11 +10,12 @@ class MenuItem(models.Model):
         return self.name
 
 ORDER_STATUS = [
-    ('pending', 'Pending'),
+     ('pending', 'Pending'),
     ('accepted', 'Accepted'),
-    ('declined', 'Declined'),
     ('preparing', 'Preparing'),
-    ('out_for_delivery', 'Out for Delivery'),
+    ('out-for-delivery', 'Out for Delivery'),
+    ('delivered', 'Delivered'),  
+    ('declined', 'Declined'),
 ]
 
 class Order(models.Model):

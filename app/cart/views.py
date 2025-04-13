@@ -1,10 +1,46 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Order, ORDER_STATUS, MenuItem
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.db.models import Q
+
 
 # Check if user is staff
 def is_staff_user(user):
     return user.is_staff
+def staff_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user.is_staff:
+                login(request, user)
+                return redirect('staff_dashboard')  # Redirect to the dashboard
+            else:
+                messages.error(request, 'You are not authorized as staff.')
+        else:
+            messages.error(request, 'Invalid credentials.')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'cart/staff_login.html', {'form': form})
+def staff_dashboard(request):
+    query = request.GET.get('q', '')
+    orders = Order.objects.select_related('customer', 'menu_item')
+
+    if query:
+        orders = orders.filter(
+            Q(customer__username__icontains=query) |
+            Q(menu_item__name__icontains=query)
+        )
+
+    context = {
+        'orders': orders.order_by('-id'),
+        'new_orders_count': orders.filter(status='pending').count(),
+    }
+    return render(request, 'cart/staff_dashboard.html', context)
+
 
 # ------------------- STAFF VIEWS -------------------
 

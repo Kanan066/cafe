@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <meta charset="UTF-8">
     <title>Beans & Blossoms</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -20,47 +21,39 @@
             font-family: system-ui;
             background-color: #EAE7DC;
         }
-
         .navbar .logo {
             font-size: 1.5rem;
             font-weight: bold;
             padding-left: 140px;
             color: #E85A4F;
         }
-
         .navbar ul {
             list-style: none;
             display: flex;
             gap: 1.8rem;
         }
-
         .navbar ul li {
             position: relative;
         }
-
         .navbar ul li a {
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             color: #E85A4F;
         }
-
         .navbar ul li a:hover {
             color: #E98074;
         }
-
         .dropdown a {
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             color: #E85A4F;
         }
-
         .dropbtn {
             border: 0;
             background: #E8E9E1;
         }
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -69,7 +62,6 @@
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
         }
-
         .dropdown-content a {
             float: none;
             color: black;
@@ -78,11 +70,9 @@
             display: block;
             text-align: left;
         }
-
         .dropdown-content a:hover {
             background-color: #E98074;
         }
-
         .dropdown:hover .dropdown-content {
             display: block;
         }
@@ -166,9 +156,11 @@
 <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content p-3">
+
+            <!-- 🔧 FIXED BUTTONS HERE -->
             <div class="d-flex justify-content-around mb-3">
-                <button class="btn btn-outline-primary" id="customerLoginBtn">Customer</button>
-                <button class="btn btn-outline-secondary" id="staffLoginBtn">Staff</button>
+                <button type="button" class="btn btn-outline-primary" id="customerLoginBtn">Customer</button>
+                <button type="button" class="btn btn-outline-secondary" id="staffLoginBtn">Staff</button>
             </div>
 
             <!-- Customer Login Form -->

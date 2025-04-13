@@ -1,26 +1,54 @@
 {% extends 'base.html' %}
-{% for item in cart_items %}
-  <div>
-    <span>{{ item.name }} - ${{ item.price }}</span>
-    <form action="{% url 'place_order' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="item_id" value="{{ item.id }}">
-        <input type="number" name="quantity" value="{{ item.quantity }}">
-        <button type="submit">Place Order</button>
-    </form>
-  </div>
-{% endfor %}
-
 
 {% block content %}
-        <!-- header -->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Shopping Cart</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">View your cart</p>
+<header class="bg-dark py-5">
+    <div class="container">
+        <div class="text-center text-white">
+            <h1 class="display-4">Your Orders</h1>
+            <p class="lead text-white-50">Track your order status</p>
+        </div>
+    </div>
+</header>
+
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="card shadow p-4">
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>{{ order.item.name }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>
+                                    {% if order.status == "accepted" %}
+                                        <span class="badge bg-success">Accepted</span>
+                                    {% elif order.status == "declined" %}
+                                        <span class="badge bg-danger">Declined</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </header>
-        <br><br><br><br><br><br><br><br><br>
+            {% else %}
+                <div class="text-center">
+                    <h5 class="text-muted">You have no orders yet.</h5>
+                    <a href="{% url 'menu' %}" class="btn btn-primary mt-3">Browse Menu</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 {% endblock %}

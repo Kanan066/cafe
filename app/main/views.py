@@ -19,7 +19,13 @@ def menu(request):
     return render(request, 'menu.html', {'products':products})
 
 def home(request):
-    return render(request, 'home.html', {})
+    show_login = request.GET.get('show_login') == '1'
+    show_register = request.GET.get('show_register') == '1'
+    return render(request, 'home.html', {
+        'show_login': show_login,
+        'show_register': show_register,
+    })
+
 
 def faqs(request):
     return render(request, 'faqs.html', {})
@@ -38,7 +44,8 @@ def login_page(request):
 
         if not User.objects.filter(username=username).exists():
             messages.error(request, 'Username does not exist')
-            return render(request, 'home.html', {'show_login': True})
+            return redirect('/?show_login=1')
+           # return render(request, 'home.html', {'show_login': True})
 
         user = authenticate(username=username, password=password)
 
