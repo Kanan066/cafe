@@ -63,7 +63,8 @@ def about(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    messages.success(request, "You have been logged out.")
+    return redirect('home')
 
 def login_page(request):
     if request.method == 'POST':
@@ -113,6 +114,7 @@ def register_user(request):
         if user.exists():
             messages.error(request, 'Username already in use')
             return redirect('/register/')
+        
 
         user = User(
             first_name=first_name,
