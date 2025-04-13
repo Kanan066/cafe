@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+
 # Create your models here.
 
 class Profile(models.Model):
@@ -71,3 +72,15 @@ class Order(models.Model):
     status = models.BooleanField(default=False)
     def __str__(self):
         return self.product
+    # main/models.py
+
+ # or however you import Product in your setup
+
+class Order(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    status = models.CharField(max_length=100, default='Pending')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # ✅ Add this line
+
+    def __str__(self):
+        return f"{self.product.name} x{self.quantity} - {self.user.username}"
